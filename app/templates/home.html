@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Jenny Jones
+{% endblock %}
+
+{% block style %}
+<style>
+    .hero-area {
+  background-size: cover;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-area .block {
+  text-align: center;
+  z-index: 99;
+}
+.hero-area .block .video-button a {
+  background: #fff;
+  display: inline-block;
+  height: 60px;
+  width: 60px;
+  border-radius: 50px;
+  line-height: 60px;
+  font-size: 20px;
+  margin-left: 3px;
+  color: #57cbcc;
+}
+.hero-area .block h1 {
+  font-size: 90px;
+  color: #fff;
+  text-transform: capitalize;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+@media (max-width: 992px) {
+  .hero-area .block h1 {
+    font-size: 60px;
+  }
+}
+@media (max-width: 768px) {
+  .hero-area .block h1 {
+    font-size: 48px;
+  }
+}
+.hero-area .block p {
+  color: #fff;
+  font-size: 20px;
+  width: 70%;
+  margin: 0 auto;
+}
+.hero-area .block .btn-transparent {
+  margin-top: 40px;
+  border-color: #fff;
+  padding: 14px 50px;
+  font-size: 18px;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.hero-video {
+  left: 50%;
+  min-height: 100%;
+  min-width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.overlay {
+  position: relative;
+}
+.overlay::before {
+  content: "";
+  background: rgba(0, 0, 0, 0.63);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  left: 0;
+}
+
+.dark-bg {
+  background: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="padding-top: 50px;" id="image">
+    <section class="hero-area overlay" style="background-image: url('../static/images/hero-area.jpg');">
+        <!-- <video autoplay muted loop class="hero-video">
+           <source src="images/banner/hero-video.mp4" type="video/mp4">
+       </video> -->
+        <div class="block">
+            <div class="video-button mb-5">
+                <a class="popup-video" href="#">
+                    <i class="tf-ion-play"></i>
+                </a>
+            </div>
+            <h1>Jenny Jones Personal Assistant</h1>
+            <p>Get your daily activities organized by a virtual personal assistant. Jenny jones saves you the cost of hiring a personal assistant!</p>
+            <a href="{{ url_for('register') }}" class="btn btn-transparent smooth-scroll">Get a assistant</a>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block form %}
+    <span class="navbar-text">
+        <a href="{{ url_for('login') }}">Acees Jenny</a>
+    </span>
+    <span class="navbar-text" style="padding: 30px 250px 30px 20px;">
+        <a href="{{ url_for('register') }}">Get a Jenny</a>
+    </span>
+{% endblock %}
+

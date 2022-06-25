@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block link %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.11.0/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.11.0/main.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% endblock %}
+
+{% block title %}
+    welcome ken
+{% endblock %}
+
+<style>
+html, body {
+  overflow: hidden; /* don't do scrollbars */
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+#calendar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+body {
+    background: rgb(99, 39, 120)
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #BA68C8
+}
+
+.profile-button {
+    background: rgb(99, 39, 120);
+    box-shadow: none;
+    border: none
+}
+
+.profile-button:hover {
+    background: #682773
+}
+
+.profile-button:focus {
+    background: #682773;
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer
+}
+
+.labels {
+    font-size: 11px
+}
+</style>
+
+{% block content %}
+
+
+<!-- main view -->
+<div id="calendar" style="padding: 100px;">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            expandRows: true,
+
+            timeZone: 'UTC',
+            initialView: 'listWeek',
+
+            // customize the button names,
+            // otherwise they'd all just say "list"
+            views: {
+            listDay: { buttonText: 'list day' },
+            listWeek: { buttonText: 'list week' },
+            listMonth: { buttonText: 'list month' }
+            },
+
+            headerToolbar: {
+            left: 'title',
+            center: '',
+            right: 'listDay,listWeek,listMonth'
+            },
+            events: [
+                {% for event in events %}
+                    {
+                        title: '{{event.title}}',
+                        start: '{{event.start_date}}T{{event.start_time}}',
+                        end: '{{event.end_date}}T{{event.end_time}}',
+                        description: '{{event.description}}',
+                        venue: '{{event.venue}}',
+                    },
+                {% endfor %}
+            ],
+            eventLimit: true,
+            slotDuration: '00:20:00',
+            navLinks: true, // can click day/week names to navigate views
+            editable: true,
+            selectable: true,
+            selectMirrow: true,
+            selectHelper: true,
+            nowIndicator: true,
+            dayMaxEvents: true, // allow "more" link when too many events
+        });
+
+        calendar.render();
+        });
+    </script>
+</div>
+<!-- Sidebar -->
+
+{% endblock %}
+
+{% block form %}
+<i class="bi-class-name"></i>
+    <span>
+        <a class="btn btn-outline-primary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><span class="bi-person-circle" ></span> loged in as: {{ user.first_name}}</a>
+    </span>
+    <span style="padding-right: 150px;">
+        <a  class="btn btn-outline-primary me-2" href="{{ url_for('logout') }}">Logout</a>
+    </span>
+{% endblock %}
+
+{% block modal_form %}
+            
+<div class="modal fade" id="reg-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" class="form-register">
+                {{ form.hidden_tag()}}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title"> Create a Schedule </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        {{ form.title.label }}
+                        <div class="col">
+                            {{ form.title(class='form-control mb-4') }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{ form.start_date.label }}
+                        <div class="col-9">
+                            {{ form.start_date(class='datepicker mb-4 form-control') }}
+                        </div>
+                        <div class="col-3">
+                            {{ form.start_time(class='timepicker mb-4 form-control') }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{ form.end_date.label }}
+                    </div>
+                    <div class="row">
+                        <div class="col-9">
+                            {{ form.end_date(class='datepicker mb-4 form-control') }}
+                        </div>
+                        <div class="col-3">
+                            {{ form.end_time(class='timepicker mb-4 form-control') }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{ form.description.label }}
+                        <div class="col">
+                            {{ form.description(class='form-control mb-4') }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{ form.venue.label }}
+                        <div class="col">
+                            {{ form.venue(class='form-control mb-4') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ form.submit(class="btn btn-primary") }}
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
