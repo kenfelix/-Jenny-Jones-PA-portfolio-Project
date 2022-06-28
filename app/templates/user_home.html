@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title %}
-    welcome ken
+    Jenny Jones
 {% endblock %}
 
 <style>
@@ -72,6 +72,16 @@ body {
 <!-- main view -->
 <div id="calendar" style="padding: 100px;">
     <script>
+        const synth = window.speechSynthesis;
+        var voiceOptioins = synth.getVoices();
+        var voiceChoice = voiceOptioins[5];
+
+        var utterThis = new SpeechSynthesisUtterance('Hi');
+        utterThis.voice = voiceChoice;
+
+        synth.speak(utterThis);
+    </script>
+    <script>  
         document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
@@ -129,7 +139,7 @@ body {
     <span>
         <a class="btn btn-outline-primary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><span class="bi-person-circle" ></span> loged in as: {{ user.first_name}}</a>
     </span>
-    <span style="padding-right: 150px;">
+    <span>
         <a  class="btn btn-outline-primary me-2" href="{{ url_for('logout') }}">Logout</a>
     </span>
 {% endblock %}

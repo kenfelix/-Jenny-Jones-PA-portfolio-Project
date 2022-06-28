@@ -20,7 +20,7 @@ class User(Base):
     last_name = Column(String(250), nullable=True)
     date_of_birth = Column(Date, nullable=True)
     session_id = Column(String(250), nullable=True)
-    login = Column(Integer, default=0)
+    login = Column(Boolean, default=False)
     reset_token = Column(String(250), nullable=True)
     pa = relationship("PA", backref=backref("user", uselist=False))
     schedules = relationship('Schedule', backref='user')

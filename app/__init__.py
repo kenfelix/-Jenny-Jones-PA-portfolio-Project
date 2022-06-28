@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '594114819130c83ca2c7e0ff'

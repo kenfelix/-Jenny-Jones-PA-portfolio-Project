@@ -51,7 +51,7 @@ class Auth:
             return None
 
         session_id = _generate_uuid()
-        self._db.update_user(user.id, session_id=session_id, login=user.login + 1)
+        self._db.update_user(user.id, session_id=session_id, login=True)
 
         return session_id
 
@@ -86,7 +86,7 @@ class Auth:
 
         try:
             user = self._db.find_user_by(id=user_id)
-            self._db.update_user(user.id, session_id=None)
+            self._db.update_user(user.id, session_id=None, login=False)
             return None
         except NoResultFound:
             return None
