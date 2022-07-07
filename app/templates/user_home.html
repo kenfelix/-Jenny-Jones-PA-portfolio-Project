@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.11.0/main.min.css">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.11.0/main.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
 {% endblock %}
 
 {% block title %}
@@ -70,68 +69,123 @@ body {
 
 
 <!-- main view -->
-<div id="calendar" style="padding: 100px;">
-    <script>
-        const synth = window.speechSynthesis;
-        var voiceOptioins = synth.getVoices();
-        var voiceChoice = voiceOptioins[5];
+    
+<div style="padding: 100px;">
+    <div class="row">
+        <button class="btn btn-primary" id="start"><span><i class="fa fa-microphone"></i></span></button>
 
-        var utterThis = new SpeechSynthesisUtterance('Hi');
-        utterThis.voice = voiceChoice;
+        <script>
 
-        synth.speak(utterThis);
-    </script>
-    <script>  
-        document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+            const startButton = document.querySelector("#start");
+            const recognition = new webkitSpeechRecognition();
+            recognition.continous = true;
+            recognition.lang = "en-US";
+            recognition.interimResults = false;
+            recognition.maxAlternative = 1;
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            expandRows: true,
+            const synth = window.speechSynthesis;
 
-            timeZone: 'UTC',
-            initialView: 'listWeek',
 
-            // customize the button names,
-            // otherwise they'd all just say "list"
-            views: {
-            listDay: { buttonText: 'list day' },
-            listWeek: { buttonText: 'list week' },
-            listMonth: { buttonText: 'list month' }
-            },
+            startButton.addEventListener("click", () => {
+                recognition.start();
+            });
 
-            headerToolbar: {
-            left: 'title',
-            center: '',
-            right: 'listDay,listWeek,listMonth'
-            },
-            events: [
-                {% for event in events %}
-                    {
-                        title: '{{event.title}}',
-                        start: '{{event.start_date}}T{{event.start_time}}',
-                        end: '{{event.end_date}}T{{event.end_time}}',
-                        description: '{{event.description}}',
-                        venue: '{{event.venue}}',
-                    },
-                {% endfor %}
-            ],
-            eventLimit: true,
-            slotDuration: '00:20:00',
-            navLinks: true, // can click day/week names to navigate views
-            editable: true,
-            selectable: true,
-            selectMirrow: true,
-            selectHelper: true,
-            nowIndicator: true,
-            dayMaxEvents: true, // allow "more" link when too many events
-        });
+            let utter = new SpeechSynthesisUtterance("Hi, i'm jenny");
+            utter.onend=()=>{
+                recognition.start();
+            };
 
-        calendar.render();
-        });
-    </script>
+            recognition.onresult =(e) => {
+                let transcript = e.results[0][0].transcript.toString().toLowerCase();
+                let check = transcript.includes("jenny")
+                let show= transcript.includes("list")
+                let create= transcript.includes("make")
+                console.log(check)
+
+                if(check === true)
+                {
+                    recognition.stop();
+                    user = '{{user.first_name}}'
+                    utter.text = "Hello, "+ user + ", how can i help you?";
+                    synth.speak(utter);
+                }
+                else if(show === true)
+                {
+                    recognition.stop();
+                    {% for event in events %}
+                        
+                        title= '{{event.title}}',
+                        start= '{{event.start_date}}',
+                        time = '{{event.start_time}}',
+                        venue= '{{event.venue}}',
+
+                        utter.text = title+", " + start+", " + "at" + time;
+                        synth.speak(utter);
+                    {% endfor %}
+                }
+                else if(create === true)
+                {
+                    recognition.stop();
+                    utter.text = "Please, click on the schedule button on the menu bar to add schedule.";
+                    synth.speak(utter);
+                }
+            }
+
+        </script>
+    </div>
+    <div id="calendar" class="row" style="padding: 100px;">
+        <script>  
+            document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+    
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                expandRows: true,
+    
+                timeZone: 'UTC',
+                initialView: 'listWeek',
+    
+                // customize the button names,
+                // otherwise they'd all just say "list"
+                views: {
+                listDay: { buttonText: 'list day' },
+                listWeek: { buttonText: 'list week' },
+                listMonth: { buttonText: 'list month' }
+                },
+    
+                headerToolbar: {
+                left: 'title',
+                center: '',
+                right: 'listDay,listWeek,listMonth'
+                },
+                events: [
+                    {% for event in events %}
+                        {
+                            title: '{{event.title}}',
+                            start: '{{event.start_date}}T{{event.start_time}}',
+                            end: '{{event.end_date}}T{{event.end_time}}',
+                            description: '{{event.description}}',
+                            venue: '{{event.venue}}',
+                        },
+                    {% endfor %}
+                ],
+                eventLimit: true,
+                slotDuration: '00:20:00',
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                selectable: true,
+                selectMirrow: true,
+                selectHelper: true,
+                nowIndicator: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+            });
+    
+            calendar.render();
+            });
+        </script>
+    </div>
+    
 </div>
 <!-- Sidebar -->
-
 {% endblock %}
 
 {% block form %}
