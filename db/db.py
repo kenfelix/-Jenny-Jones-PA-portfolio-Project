@@ -60,13 +60,13 @@ class DB:
             raise NoResultFound
         return rqrd_usr
 
-    def find_schedule_by(self, **kwargs) -> User:
+    def find_schedule_by(self, **kwargs) -> Schedule:
         """
-        find_user_by - a method to find a user
+        find_schedule_by - a method to find a user
         Arguments:
             kwargs: key word based argument
         Return:
-            the first row found in the users
+            the first row found in the Schedule
         """
         if kwargs is None:
             raise InvalidRequestError
